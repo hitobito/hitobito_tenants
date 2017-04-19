@@ -17,6 +17,10 @@ module HitobitoTenants
     end
 
     config.to_prepare do
+      BaseJob.send(:include, Tenants::BaseJob)
+      ApplicationMailer.send(:include, Tenants::DynamicUrlHost)
+      MailRelay::Base.send(:extend, Tenants::MailRelay::DynamicDomain)
+      MailRelay::Lists.send(:extend, Tenants::MailRelay::DynamicDomain)
     end
 
     initializer 'tenants.configure_apartment' do |_app|
@@ -33,10 +37,8 @@ module HitobitoTenants
                                { compress: true,
                                  namespace: -> { Apartment::Tenant.current } }
 
-      app.config.action_mailer.default_url_options[:host] = -> { Apartment.current_host_name }
-
       app.config.to_prepare do
-        mailer_sender = -> { "hitobito <noreply@#{Apartment.current_host_name}>" }
+        mailer_sender = ->(_mailer) { "hitobito <noreply@#{Apartment.current_host_name}>" }
         ActionMailer::Base.default(from: mailer_sender)
         Devise.mailer_sender = mailer_sender
       end
