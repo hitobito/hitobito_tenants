@@ -92,6 +92,18 @@ Apartment.configure do |config|
   config.seed_after_create = true
 end
 
+module Apartment
+
+  class << self
+
+    def current_host_name
+      "#{Apartment::Tenant.current}.#{ENV['RAILS_HOST_NAME'] || 'hitobito.local'}"
+    end
+
+  end
+
+end
+
 # Setup a custom Tenant switching middleware. The Proc should return the name of the Tenant that
 # you want to switch to.
 # Rails.application.config.middleware.use 'Apartment::Elevators::Generic', lambda { |request|

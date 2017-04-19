@@ -19,13 +19,27 @@ module HitobitoTenants
     config.to_prepare do
     end
 
-    initializer 'tenants.configure_apartment' do |app|
+    initializer 'tenants.configure_apartment' do |_app|
       require 'hitobito_tenants/apartment'
     end
 
     initializer 'tenants.add_settings' do |_app|
       Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))
       Settings.reload!
+    end
+
+    initializer 'tenants.tenant_specific_config', before: :add_to_prepare_blocks do |app|
+      app.config.cache_store = :dalli_store,
+                               { compress: true,
+                                 namespace: -> { Apartment::Tenant.current } }
+
+      app.config.action_mailer.default_url_options[:host] = -> { Apartment.current_host_name }
+
+      app.config.to_prepare do
+        mailer_sender = -> { "hitobito <noreply@#{Apartment.current_host_name}>" }
+        ActionMailer::Base.default(from: mailer_sender)
+        Devise.mailer_sender = mailer_sender
+      end
     end
 
   end
