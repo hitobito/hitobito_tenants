@@ -5,6 +5,7 @@ AllCops:
     - Rakefile
     - Gemfile
     - db/**/*
+    - lib/**/*.rake
     - config/**/*
     - bin/**/*
     - tmp/**/*

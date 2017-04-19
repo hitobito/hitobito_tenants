@@ -56,7 +56,7 @@ Apartment.configure do |config|
   #   end
   # end
   #
-  config.tenant_names = lambda { Tenant.list.pluck(:name) }
+  config.tenant_names = -> { Tenant.list.pluck(:name) }
 
   #
   # ==> PostgreSQL only options

@@ -6,13 +6,19 @@
 #  https://github.com/hitobito/hitobito_tenants.
 
 module Tenants
-  module DynamicUrlHost
+  module Uploader
+    module DynamicDir
 
-    def default_url_options
-      super.tap do |hash|
-        hash[:host] = Apartment.current_host_name
+      extend ActiveSupport::Concern
+
+      included do
+        alias_method_chain :base_store_dir, :tenants
       end
-    end
 
+      def base_store_dir_with_tenants
+        "#{base_store_dir_without_tenants}/#{Apartment::Tenant.current}"
+      end
+
+    end
   end
 end

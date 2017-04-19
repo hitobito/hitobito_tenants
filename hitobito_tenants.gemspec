@@ -7,7 +7,6 @@ require 'hitobito_tenants/version'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  # rubocop:disable SingleSpaceBeforeFirstArg
   s.name        = 'hitobito_tenants'
   s.version     = HitobitoTenants::VERSION
   s.authors     = ['Pascal Zumkehr']
