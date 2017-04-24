@@ -27,13 +27,13 @@ namespace :tenants do
 
   desc 'Lists all defined tenants'
   task :list => :environment do
-    say Apartment.tenant_names
+    puts Apartment.tenant_names
   end
 
   desc 'Migrates all defined tenants to the latest version'
   task :migrate => :environment do
     Apartment.tenant_names.each do |tenant|
-      say "Migrating tenant #{tenant}..."
+      puts "Migrating tenant #{tenant}..."
       Apartment::Tenant.migrate(tenant)
     end
   end
