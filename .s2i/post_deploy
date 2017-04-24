@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -ex
+
+# This script is executed after our rails images' default assemble script.
+
+pushd /opt/app-root/src
+
+bundle exec rake tenants:list --trace
+bundle exec rake tenants:migrate --trace
+
+popd
