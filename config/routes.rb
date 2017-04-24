@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   language_scope do
     # Define wagon routes here
 
+    resources :tenants
   end
 
 end

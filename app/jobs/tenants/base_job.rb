@@ -18,19 +18,19 @@ module Tenants
 
     def initialize_with_tenants
       initialize_without_tenants
-      @tenant = Apartment::Tenant.current
+      @current_tenant = Apartment::Tenant.current
     end
 
     def before_with_tenants(delayed_job)
       before_without_tenants(delayed_job)
-      Apartment::Tenant.switch!(@tenant)
+      Apartment::Tenant.switch!(@current_tenant)
     end
 
     private
 
     def parameters_with_tenants
       parameters_without_tenants.tap do |hash|
-        hash[:tenant] = @tenant
+        hash[:current_tenant] = @current_tenant
       end
     end
 

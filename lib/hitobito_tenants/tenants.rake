@@ -9,24 +9,17 @@ namespace :tenant do
   desc 'Creates a new tenant with the given NAME'
   task :create => :environment do
     name = ENV['NAME']
-    if Tenant.where(name: name).exists?
-      say "Tenant #{name} already exists!"
-      exit 1
-    end
 
-    Apartment::Tenant.create(name)
     Tenant.create!(name: name)
+    TenantCreatorJob.new(name).perform
   end
 
   desc 'Drops the tenant with the given NAME'
   task :drop => :environment do
     name = ENV['NAME']
-    unless Tenant.where(name: name).exists?
-      say "Tenant #{name} does not exist!"
-    end
 
-    Apartment::Tenant.drop(name)
-    Tenant.find_by(name: name).destroy!
+    Tenant.find_by!(name: name).destroy!
+    TenantDestroyerJob.new(name).perform
   end
 end
 

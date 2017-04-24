@@ -7,6 +7,7 @@
 
 load File.expand_path('../../app_root.rb', __FILE__)
 ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
+ENV['RAILS_USE_TEST_GROUPS'] = 'true'
 
 require File.join(ENV['APP_ROOT'], 'spec', 'spec_helper.rb')
 
@@ -16,4 +17,6 @@ Dir[HitobitoTenants::Wagon.root.join('spec/support/**/*.rb')].sort.each { |f| re
 
 RSpec.configure do |config|
   config.fixture_path = File.expand_path('../fixtures', __FILE__)
+
+  config.before { Apartment.default_tenant = Apartment::Tenant.current }
 end

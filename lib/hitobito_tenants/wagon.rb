@@ -23,6 +23,12 @@ module HitobitoTenants
       ApplicationMailer.send(:include, Tenants::DynamicUrlHost)
       MailRelay::Base.send(:extend, Tenants::MailRelay::DynamicDomain)
       MailRelay::Lists.send(:extend, Tenants::MailRelay::DynamicDomain)
+
+      Ability.send(:include, Tenants::Ability)
+      Ability.store.register TenantAbility
+
+      admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
+      admin[:active_for] << 'tenants'
     end
 
     initializer 'tenants.configure_apartment' do |_app|
