@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+OS_USER         = 'hitobito_kotonaru_admin'.freeze
+OS_PROJECT      = 'hitobito_kotonaru'.freeze
+HITOBITO_DOMAIN = 'hitobito.ch'.freeze
+
+def help
+  puts <<-TXT
+    #{$PROGRAM_NAME} tenant [subdomain]
+
+    tentant      the name of the new tenant
+    subdomain    the subdomain under #{HITOBITO_DOMAIN}, defaulting to the tenant
+
+  TXT
+
+  exit
+end
+
+tenant    = ARGV[1] || help
+subdomain = ARGV[2] || tenant
+fqdn      = "#{subdomain}.#{HITOBITO_DOMAIN}"
+
+system "oc login -u #{OS_USER}"
+system "oc project #{OS_PROJECT}"
+system "oc expose service rails -l type=customer --name=#{tenant} --hostname=#{fqdn}"
