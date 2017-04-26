@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+type = YML
+
+[hitobito_tenants.models-tenants]
+file_filter = config/locales/models.tenants.<lang>.yml
+source_file = config/locales/models.tenants.de.yml
+source_lang = de
+
+[hitobito_tenants.views-tenants]
+file_filter = config/locales/views.tenants.<lang>.yml
+source_file = config/locales/views.tenants.de.yml
+source_lang = de
+
