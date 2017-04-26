@@ -17,7 +17,7 @@ describe TenantsController, type: :controller do
 
   let!(:test_entry) { Tenant.create!(name: 'tenant1') }
   let(:test_entry_attrs) do
-    { name: 'Tenant T' }
+    { name: 'tenant-t' }
   end
 
   before { sign_in(people(:top_leader)) }

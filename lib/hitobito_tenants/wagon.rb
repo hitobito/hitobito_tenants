@@ -21,8 +21,7 @@ module HitobitoTenants
       Event::AttachmentUploader.send(:include, Tenants::Uploader::DynamicDir)
       BaseJob.send(:include, Tenants::BaseJob)
       ApplicationMailer.send(:include, Tenants::DynamicUrlHost)
-      MailRelay::Base.send(:extend, Tenants::MailRelay::DynamicDomain)
-      MailRelay::Lists.send(:extend, Tenants::MailRelay::DynamicDomain)
+      MailRelay::Lists.send(:include, Tenants::MailRelay::Lists)
 
       Ability.send(:include, Tenants::Ability)
       Ability.store.register TenantAbility
@@ -32,7 +31,11 @@ module HitobitoTenants
     end
 
     initializer 'tenants.configure_apartment' do |_app|
+      require 'apartment/elevators/main_subdomain'
       require 'hitobito_tenants/apartment'
+
+      Rails.application.config.middleware.insert_before Rails::Rack::Logger,
+                                                        Apartment::Elevators::MainSubdomain
     end
 
     initializer 'tenants.add_settings' do |_app|

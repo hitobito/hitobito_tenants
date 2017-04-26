@@ -8,7 +8,7 @@
 require 'wagons'
 # require 'your_wagon_dependencies'
 require 'apartment'
-require 'apartment/adapters/wagon'
+require 'apartment/adapters/wagons'
 require 'hitobito_tenants/wagon'
 
 module HitobitoTenants

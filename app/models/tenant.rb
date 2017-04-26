@@ -8,12 +8,21 @@
 class Tenant < ActiveRecord::Base
 
   validates_by_schema
-  validates :name, uniqueness: true
+  validates :name,
+            uniqueness: true,
+            exclusion: { in: :excluded_names },
+            format: /\A[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\z/
 
   scope :list, -> { order(:name) }
 
   def to_s
     name
+  end
+
+  def excluded_names
+    Array(Settings.tenants.subdomains.excluded) <<
+      Settings.tenants.subdomains.admin <<
+      Apartment::Tenant.default_tenant
   end
 
 end

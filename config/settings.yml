@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, hitobito AG. This file is part of
+#  Copyright (c) 2017, hitobito AG. This file is part of
 #  hitobito_tenants and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
@@ -14,3 +14,12 @@ application:
 # Initially, a password reset token may be mailed from the application
 # to this address to set a password.
 root_email: hitobito@puzzle.ch
+
+tenants:
+  domain: <%= ENV['RAILS_HOST_NAME'] || 'hitobito.local' %>
+  subdomains:
+    admin: <%= ENV['RAILS_ADMIN_SUBDOMAIN'] || 'admin' %>
+    excluded:
+      <% ENV['RAILS_EXCLUDED_SUBDOMAINS'].to_s.split(',').each do |d| %>
+      - <%= d.strip %>
+      <% end %>

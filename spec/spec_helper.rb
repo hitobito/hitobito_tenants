@@ -18,5 +18,7 @@ Dir[HitobitoTenants::Wagon.root.join('spec/support/**/*.rb')].sort.each { |f| re
 RSpec.configure do |config|
   config.fixture_path = File.expand_path('../fixtures', __FILE__)
 
+  config.before(:suite) { Tenant.create!(name: 'test-tenant') }
+
   config.before { Apartment.default_tenant = Apartment::Tenant.current }
 end

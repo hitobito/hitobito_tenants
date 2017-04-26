@@ -22,8 +22,16 @@ describe TenantAbility do
     it { is_expected.not_to be_able_to(:update, Tenant.new) }
   end
 
+  context 'as global root' do
+    let(:user) { Person.find_by(email: Settings.root_email) }
+
+    it { is_expected.to be_able_to(:index, Tenant) }
+    it { is_expected.to be_able_to(:create, Tenant.new) }
+    it { is_expected.to be_able_to(:destroy, Tenant.new) }
+  end
+
   context 'as tenant admin' do
-    before { Apartment.default_tenant = 'default' }
+    before { allow(Apartment::Tenant).to receive(:current).and_return('other') }
 
     let(:user) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)).person }
 
@@ -33,21 +41,13 @@ describe TenantAbility do
   end
 
   context 'as tenant root' do
-    before { Apartment.default_tenant = 'default' }
+    before { allow(Apartment::Tenant).to receive(:current).and_return('other') }
 
     let(:user) { Person.find_by(email: Settings.root_email) }
 
     it { is_expected.not_to be_able_to(:index, Tenant) }
     it { is_expected.not_to be_able_to(:create, Tenant.new) }
     it { is_expected.not_to be_able_to(:destroy, Tenant.new) }
-  end
-
-  context 'as global root' do
-    let(:user) { Person.find_by(email: Settings.root_email) }
-
-    it { is_expected.to be_able_to(:index, Tenant) }
-    it { is_expected.to be_able_to(:create, Tenant.new) }
-    it { is_expected.to be_able_to(:destroy, Tenant.new) }
   end
 
 end
