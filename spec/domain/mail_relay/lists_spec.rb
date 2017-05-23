@@ -13,12 +13,11 @@ describe MailRelay::Lists do
     mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml')))
     mail.header['X-Envelope-To'] = nil
     mail.header['X-Envelope-To'] = envelope_to
-    mail.header['X-Envelope-Host'] = envelope_host
     mail.from = from
     mail
   end
 
-  let(:envelope_to) { list.mail_name }
+  let(:envelope_to) { "#{list.mail_name}+#{envelope_host}" }
   let(:from) { people(:top_leader).email }
 
   let(:bll)  { people(:bottom_leader) }
@@ -38,7 +37,7 @@ describe MailRelay::Lists do
 
   context 'to admin tenant' do
 
-    let(:envelope_host) { 'admin.hitobito.local' }
+    let(:envelope_host) { 'admin' }
 
     it 'relays' do
       expect(Apartment::Tenant).to receive(:switch).with(Apartment::Tenant.default_tenant).and_yield
@@ -54,7 +53,7 @@ describe MailRelay::Lists do
 
   context 'to custom tenant' do
 
-    let(:envelope_host) { 'test-tenant.hitobito.local' }
+    let(:envelope_host) { 'test-tenant' }
 
     it 'relays' do
       expect(Apartment::Tenant).to receive(:switch).with('test-tenant').and_yield
@@ -71,7 +70,7 @@ describe MailRelay::Lists do
 
   context 'to non-existing tenant' do
 
-    let(:envelope_host) { 'test-tenant.hitobito.local' }
+    let(:envelope_host) { 'test-tenant' }
 
     it 'does not do anything' do
       expect_any_instance_of(Apartment::Elevators::MainSubdomain).to receive(:tenant_database).and_return(nil)

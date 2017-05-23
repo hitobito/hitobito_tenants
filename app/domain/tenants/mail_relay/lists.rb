@@ -14,15 +14,11 @@ module Tenants
       included do
         singleton_class.alias_method_chain :mail_domain, :tenants
         alias_method_chain :relay, :tenants
-
-        # Define a header that contains the original receiver address.
-        # This header could be set by the mail server.
-        class_attribute :receiver_host_header
-        self.receiver_host_header = 'X-Envelope-Host'
+        alias_method_chain :receiver_from_x_header, :tenants
       end
 
       def relay_with_tenants
-        host = envelope_host_name
+        host = "#{envelope_host_name}.#{Settings.tenants.domain}"
         database = Apartment::Elevators::MainSubdomain.new(nil).tenant_database(host)
         if database
           Apartment::Tenant.switch(database) { relay_without_tenants }
@@ -34,6 +30,12 @@ module Tenants
 
       private
 
+      # Try to read the envelope receiver from the given x header.
+      # The header has the form `mail_name[+suffix]+subdomain`
+      def receiver_from_x_header_with_tenants
+        receiver_x_header_parts.first
+      end
+
       # The receiver subdomain that originally got this email.
       # Returns only the first part after the @ sign
       def envelope_host_name
@@ -42,20 +44,23 @@ module Tenants
           raise("Could not determine original receiver tenant for email:\n#{message.header}")
       end
 
+      # Try to read the envelope receiver from the given x header
+      # The header has the form `mail_name[+suffix]+subdomain`
+      def receiver_host_from_x_header
+        receiver_x_header_parts.last
+      end
+
+      def receiver_x_header_parts
+        field = message.header[receiver_header]
+        field ? field.to_s.rpartition('+') : []
+      end
+
       # Heuristic method to find actual receiver of the message.
       # May return nil if could not determine.
       def receiver_host_from_received_header
         if (received = message.received)
           received = received.first if received.respond_to?(:first)
           received.info[/ for .*?[^\s<>]+@([^\s<>]+)/, 1]
-        end
-      end
-
-      # Try to read the envelope receiver from the given x header
-      def receiver_host_from_x_header
-        field = message.header[receiver_header]
-        if field
-          field.to_s.split('@', 2).second || message.header[receiver_host_header].to_s
         end
       end
 
