@@ -17,6 +17,7 @@ module HitobitoTenants
     end
 
     config.to_prepare do
+      MailingList.send(:include, Tenants::MailingList)
       Person::PictureUploader.send(:include, Tenants::Uploader::DynamicDir)
       Event::AttachmentUploader.send(:include, Tenants::Uploader::DynamicDir)
       BaseJob.send(:include, Tenants::BaseJob)

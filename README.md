@@ -8,13 +8,26 @@ is required to actually run it.
 
 ## Development
 
-Start the Rails server to listen on all names: `rails s -b0.0.0.0`.
+It is preferable to develop directly with a MySQL database instead of the 
+standard Sqlite3 DB.
+
+After adjusting your `Wagonfile`, create a new development database:
+
+    bin/with_mysql rake db:create db:setup:all
+
+Start the Rails server to listen on all names:
+ 
+    bin/with_mysql rails s -b0.0.0.0
 
 Add entries for all your tenants in the `/etc/hosts` file:
 
-`127.0.0.1      admin.hitobito.local tenant1.hitobito.local tenant2.hitobito.local`
+    127.0.0.1      admin.hitobito.local tenant1.hitobito.local tenant2.hitobito.local
 
 Then open the application in your browser at `admin.hitobito.local:3000`.
+
+Tenants are created in delayed jobs, so do not forget to run them, too:
+
+    bin/with_mysql rake jobs:work
 
 ## Deployment
 
