@@ -21,6 +21,7 @@ module HitobitoTenants
       MailingList.send(:include, Tenants::MailingList)
       Person::PictureUploader.send(:include, Tenants::Uploader::DynamicDir)
       Event::AttachmentUploader.send(:include, Tenants::Uploader::DynamicDir)
+      Group::LogoUploader.send(:include, Tenants::Uploader::DynamicDir)
       BaseJob.send(:include, Tenants::BaseJob)
       ApplicationMailer.send(:include, Tenants::DynamicUrlHost)
       MailRelay::Lists.send(:include, Tenants::MailRelay::Lists)
