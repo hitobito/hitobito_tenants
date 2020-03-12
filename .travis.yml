@@ -12,7 +12,7 @@ env:
     - RAILS_ENV=development
 rvm:
   - 2.2.3
-  - 2.4.0
+  - 2.5
 install:
   - unset BUNDLE_GEMFILE # we bundle in different directories
   - export HITOBITO_BRANCH=$([[ $TRAVIS_BRANCH = 'stable' ]] && echo 'stable' || echo 'master')
@@ -28,6 +28,3 @@ install:
   - cd $HITOBITO_CORE_DIR && rvm use $TRAVIS_RUBY_VERSION --fuzzy
 script:
   - bundle exec rake db:create ci:wagon --trace
-matrix:
-  allow_failures:
-  - rvm: 2.4.0
