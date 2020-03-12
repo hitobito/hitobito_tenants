@@ -14,7 +14,7 @@ def create_initial_admin(group, admin_type)
   unless admin_type.exists?
     admin = Person.create!(first_name: 'Bitte',
                            last_name: 'Ändern',
-                           email: 'admin@hitobito.ch',
+                           email: 'info@hitobito.com',
                            encrypted_password: BCrypt::Password.create('ändere_mich', cost: 1))
     admin_type.create!(person: admin, group: group)
     admin
