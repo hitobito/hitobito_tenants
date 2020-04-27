@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/**/*']
   # rubocop:enable SingleSpaceBeforeFirstArg
 
-  s.add_dependency 'apartment'
+  s.add_dependency 'apartment', '>= 2.2.0'
 end
