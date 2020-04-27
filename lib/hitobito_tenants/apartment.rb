@@ -82,6 +82,18 @@ Apartment.configure do |config|
   config.prepend_environment = false
 
   config.seed_after_create = true
+
+  # Apartment supports parallelizing migrations into multiple threads when you
+  # have a large number of tenants. By default, parallel migrations is turned
+  # off. You can enable this by setting parallel_migration_threads to the
+  # number of threads you want to use in your initializer.
+  #
+  # Keep in mind that because migrations are going to access the database, the
+  # number of threads indicated here should be less than the pool size that
+  # Rails will use to connect to your database.
+  #
+  # At the time of this writing, the pool-size is 20
+  config.parallel_migration_threads = 15
 end
 
 module Apartment
