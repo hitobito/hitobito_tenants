@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, hitobito AG. This file is part of
+#  Copyright (c) 2012-2020, hitobito AG. This file is part of
 #  hitobito_tenants and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
@@ -32,26 +32,27 @@ module Tenants
 
       # Try to read the envelope receiver from the given x header.
       # The header has the form `mail_name[+suffix]+subdomain`
-      def receiver_from_x_header_with_tenants
-        receiver_x_header_parts.first
+      def receiver_from_x_header_with_tenants(header_name)
+        receiver_x_header_parts(header_name).first
       end
 
       # The receiver subdomain that originally got this email.
       # Returns only the first part after the @ sign
       def envelope_host_name
-        receiver_host_from_x_header ||
+        receiver_host_from_x_header('X-Envelope-To') || # old mail server
+          receiver_host_from_x_header('X-Original-To') || # new mail server
           receiver_host_from_received_header ||
           raise("Could not determine original receiver tenant for email:\n#{message.header}")
       end
 
       # Try to read the envelope receiver from the given x header
       # The header has the form `mail_name[+suffix]+subdomain`
-      def receiver_host_from_x_header
-        receiver_x_header_parts.last
+      def receiver_host_from_x_header(header_name)
+        receiver_x_header_parts(header_name).last
       end
 
-      def receiver_x_header_parts
-        field = message.header[receiver_header]
+      def receiver_x_header_parts(header_name)
+        field = message.header[header_name]
         field ? field.to_s.rpartition('+') : []
       end
 
