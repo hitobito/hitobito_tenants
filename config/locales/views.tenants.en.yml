@@ -1,6 +1,8 @@
-#  Copyright (c) 2017, hitobito AG. This file is part of
-#  hitobito_tenants and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_tenants.
-
 en:
+  tenants:
+    create:
+      flash:
+        success: "%{model}was created successfully. I takes a few minutes until the new tenant can be accessed."
+    destroy:
+      flash:
+        success: "%{model}was deleted successfullly. I may take a few minutes until the tenant is completely offline."
