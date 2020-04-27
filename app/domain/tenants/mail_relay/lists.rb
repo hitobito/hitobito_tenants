@@ -23,8 +23,7 @@ module Tenants
         if database
           Apartment::Tenant.switch(database) { relay_without_tenants }
         else
-          logger.info("Ignored email from #{sender_email} " \
-                      "for unknown tenant #{host}")
+          logger.info("Ignored email from #{sender_email} for unknown tenant #{host}")
         end
       end
 
@@ -66,11 +65,9 @@ module Tenants
       end
 
       module ClassMethods
-
         def mail_domain_with_tenants
           Apartment.current_host_name
         end
-
       end
 
     end
