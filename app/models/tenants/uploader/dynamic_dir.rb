@@ -9,14 +9,8 @@ module Tenants
   module Uploader
     module DynamicDir
 
-      extend ActiveSupport::Concern
-
-      included do
-        alias_method_chain :base_store_dir, :tenants
-      end
-
-      def base_store_dir_with_tenants
-        "#{base_store_dir_without_tenants}/#{Apartment::Tenant.current}"
+      def base_store_dir
+        "#{super}/#{Apartment::Tenant.current}"
       end
 
     end

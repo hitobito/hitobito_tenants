@@ -13,11 +13,7 @@ module Apartment
 
       extend ActiveSupport::Concern
 
-      included do
-        alias_method_chain :create, :wagons
-      end
-
-      def create_with_wagons(tenant)
+      def create(tenant)
         create_tenant(tenant)
         migrate(tenant)
       end
@@ -53,5 +49,5 @@ module Apartment
   end
 end
 
-Apartment::Adapters::AbstractAdapter.send(:include, Apartment::Adapters::Wagons)
+Apartment::Adapters::AbstractAdapter.send(:prepend, Apartment::Adapters::Wagons)
 Apartment::Tenant.def_delegators :adapter, :migrate
