@@ -9,7 +9,7 @@ class Tenant < ActiveRecord::Base
 
   validates_by_schema
   validates :name,
-            uniqueness: true,
+            uniqueness: { case_sensitive: false },
             exclusion: { in: :excluded_names },
             format: /\A[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\z/
 
