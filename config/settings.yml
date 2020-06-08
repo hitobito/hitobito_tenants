@@ -6,7 +6,7 @@
 
 # Settings relevant for the hitobito_tenants wagon
 # Overrides settings from the main application
-application:
+# application:
 
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application,

@@ -32,7 +32,9 @@ describe TenantsController, type: :controller do
 
   describe 'PUT update' do
     it 'is not allowed' do
-      expect { put :update, id: test_entry.id }.to raise_error(CanCan::AccessDenied)
+      expect do
+        put :update, params: { id: test_entry.id }
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 

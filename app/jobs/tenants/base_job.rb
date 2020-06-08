@@ -10,26 +10,20 @@ module Tenants
 
     extend ActiveSupport::Concern
 
-    included do
-      alias_method_chain :initialize, :tenants
-      alias_method_chain :before, :tenants
-      alias_method_chain :parameters, :tenants
-    end
-
-    def initialize_with_tenants
-      initialize_without_tenants
+    def initialize
+      super
       @current_tenant = Apartment::Tenant.current
     end
 
-    def before_with_tenants(delayed_job)
-      before_without_tenants(delayed_job)
+    def before(delayed_job)
+      super(delayed_job)
       Apartment::Tenant.switch!(@current_tenant)
     end
 
     private
 
-    def parameters_with_tenants
-      parameters_without_tenants.tap do |hash|
+    def parameters
+      super.tap do |hash|
         hash[:current_tenant] = @current_tenant
       end
     end

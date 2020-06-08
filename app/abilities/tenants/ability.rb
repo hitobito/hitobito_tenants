@@ -7,15 +7,8 @@
 
 module Tenants
   module Ability
-
-    extend ActiveSupport::Concern
-
-    included do
-      alias_method_chain :define_root_abilities, :tenants
-    end
-
-    def define_root_abilities_with_tenants
-      define_root_abilities_without_tenants
+    def define_root_abilities
+      super
 
       unless Apartment::Tenant.current == Apartment::Tenant.default_tenant
         cannot :manage, Tenant

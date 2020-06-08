@@ -18,15 +18,15 @@ module HitobitoTenants
 
     config.to_prepare do
       ApplicationController.send(:include, Tenants::ApplicationController)
-      MailingList.send(:include, Tenants::MailingList)
-      Person::PictureUploader.send(:include, Tenants::Uploader::DynamicDir)
-      Event::AttachmentUploader.send(:include, Tenants::Uploader::DynamicDir)
-      Group::LogoUploader.send(:include, Tenants::Uploader::DynamicDir)
-      BaseJob.send(:include, Tenants::BaseJob)
+      MailingList.send(:prepend, Tenants::MailingList)
+      Person::PictureUploader.send(:prepend, Tenants::Uploader::DynamicDir)
+      Event::AttachmentUploader.send(:prepend, Tenants::Uploader::DynamicDir)
+      Group::LogoUploader.send(:prepend, Tenants::Uploader::DynamicDir)
+      BaseJob.send(:prepend, Tenants::BaseJob)
       ApplicationMailer.send(:include, Tenants::DynamicUrlHost)
-      MailRelay::Lists.send(:include, Tenants::MailRelay::Lists)
+      MailRelay::Lists.send(:prepend, Tenants::MailRelay::Lists)
 
-      Ability.send(:include, Tenants::Ability)
+      Ability.send(:prepend, Tenants::Ability)
       Ability.store.register TenantAbility
 
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }

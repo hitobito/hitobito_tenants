@@ -11,17 +11,12 @@ module Tenants
 
       extend ActiveSupport::Concern
 
-      included do
-        singleton_class.alias_method_chain :mail_domain, :tenants
-        alias_method_chain :relay, :tenants
-        alias_method_chain :receiver_from_x_header, :tenants
-      end
 
-      def relay_with_tenants
+      def relay
         host = "#{envelope_host_name}.#{Settings.tenants.domain}"
         database = Apartment::Elevators::MainSubdomain.new(nil).tenant_database(host)
         if database
-          Apartment::Tenant.switch(database) { relay_without_tenants }
+          Apartment::Tenant.switch(database) { super }
         else
           logger.info("Ignored email from #{sender_email} for unknown tenant #{host}")
         end
@@ -29,9 +24,13 @@ module Tenants
 
       private
 
+      def envelope_sender
+        self.class.personal_return_path(envelope_receiver_name, sender_email, mail_domain)
+      end
+
       # Try to read the envelope receiver from the given x header.
       # The header has the form `mail_name[+suffix]+subdomain`
-      def receiver_from_x_header_with_tenants(header_name)
+      def receiver_from_x_header(header_name)
         receiver_x_header_parts(header_name).first
       end
 
@@ -64,10 +63,8 @@ module Tenants
         end
       end
 
-      module ClassMethods
-        def mail_domain_with_tenants
-          Apartment.current_host_name
-        end
+      def mail_domain
+        Apartment.current_host_name
       end
 
     end
