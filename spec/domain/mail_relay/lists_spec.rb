@@ -11,13 +11,12 @@ describe MailRelay::Lists do
 
   let(:message) do
     mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml')))
-    mail.header['X-Envelope-To'] = nil
-    mail.header['X-Envelope-To'] = envelope_to
+    mail.header['X-Original-To'] = original_to
     mail.from = from
     mail
   end
 
-  let(:envelope_to) { "#{list.mail_name}+#{envelope_host}" }
+  let(:original_to) { "#{list.mail_name}@#{envelope_host}.#{Settings.tenants.domain}" }
   let(:from) { people(:top_leader).email }
 
   let(:bll)  { people(:bottom_leader) }

@@ -13,7 +13,7 @@ module Tenants
 
 
       def relay
-        host = "#{envelope_host_name}.#{Settings.tenants.domain}"
+        host = envelope_host_name
         database = Apartment::Elevators::MainSubdomain.new(nil).tenant_database(host)
         if database
           Apartment::Tenant.switch(database) { super }
@@ -28,30 +28,16 @@ module Tenants
         self.class.personal_return_path(envelope_receiver_name, sender_email, mail_domain)
       end
 
-      # Try to read the envelope receiver from the given x header.
-      # The header has the form `mail_name[+suffix]+subdomain`
-      def receiver_from_x_header(header_name)
-        receiver_x_header_parts(header_name).first
-      end
-
       # The receiver subdomain that originally got this email.
       # Returns only the first part after the @ sign
       def envelope_host_name
-        receiver_host_from_x_header('X-Envelope-To') || # old mail server
-          receiver_host_from_x_header('X-Original-To') || # new mail server
-          receiver_host_from_received_header ||
+        receiver_host_from_x_original_to_header ||
+        receiver_host_from_received_header ||
           raise("Could not determine original receiver tenant for email:\n#{message.header}")
       end
 
-      # Try to read the envelope receiver from the given x header
-      # The header has the form `mail_name[+suffix]+subdomain`
-      def receiver_host_from_x_header(header_name)
-        receiver_x_header_parts(header_name).last
-      end
-
-      def receiver_x_header_parts(header_name)
-        field = message.header[header_name]
-        field ? field.to_s.rpartition('+') : []
+      def receiver_host_from_x_original_to_header
+        first_header('X-Original-To').to_s.split('@').last.presence
       end
 
       # Heuristic method to find actual receiver of the message.
