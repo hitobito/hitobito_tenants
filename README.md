@@ -55,3 +55,12 @@ This user will also receive the no-reply mailing list emails.
 Hence, clients may directly login with `admin@hitobito.ch / ändere_mich`, 
 change the name and email address to their own and then change the password
 on the login screen.
+
+In the rails console, you can switch the app to a specific tenant by
+executing
+
+	> Apartment::Tenant.switch!('tenant')
+
+Switching back can be done with
+
+	> Apartment::Tenant.switch!
