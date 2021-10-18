@@ -37,7 +37,7 @@ module HitobitoTenants
       require 'apartment/elevators/main_subdomain'
       require 'hitobito_tenants/apartment'
 
-      Rails.application.config.middleware.insert_before Rails::Rack::Logger,
+      Rails.application.config.middleware.insert_before Rack::Cors,
                                                         Apartment::Elevators::MainSubdomain
     end
 
