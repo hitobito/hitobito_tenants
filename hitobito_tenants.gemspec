@@ -16,8 +16,7 @@ Gem::Specification.new do |s|
   s.description = 'Add database multi-tenancy to hitobito'
 
   s.files = Dir['{app,config,db,lib}/**/*'] + ['Rakefile']
-  s.test_files = Dir['test/**/*']
-  # rubocop:enable SingleSpaceBeforeFirstArg
+  s.test_files = Dir['{test,spec}/**/*']
 
-  s.add_dependency 'ros-apartment', '~> 2.4.0'
+  s.add_dependency 'ros-apartment', '~> 2.10.0'
 end
