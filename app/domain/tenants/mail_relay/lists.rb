@@ -50,7 +50,7 @@ module Tenants
       end
 
       def mail_domain
-        Apartment.current_host_name
+        URI("https://#{Apartment.current_host_name}").hostname
       end
 
     end
