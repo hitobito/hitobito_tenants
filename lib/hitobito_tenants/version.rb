@@ -6,5 +6,5 @@
 #  https://github.com/hitobito/hitobito_tenants.
 
 module HitobitoTenants
-  VERSION = '1.27.19'.freeze
+  VERSION = '1.27.21'.freeze
 end
