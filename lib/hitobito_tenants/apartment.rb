@@ -97,9 +97,7 @@ Apartment.configure do |config|
 end
 
 module Apartment
-
   class << self
-
     def current_host_name
       "#{current_subdomain}.#{Settings.tenants.domain}"
     end
@@ -111,7 +109,5 @@ module Apartment
     def default_tenant?
       Apartment::Tenant.current == Apartment::Tenant.default_tenant
     end
-
   end
-
 end
