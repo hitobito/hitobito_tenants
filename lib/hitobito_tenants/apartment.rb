@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, hitobito AG. This file is part of
+#  Copyright (c) 2012-2022, hitobito AG. This file is part of
 #  hitobito_tenants and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
@@ -15,7 +15,10 @@ Apartment.configure do |config|
   # namespace.
   # A typical example would be a Customer or Tenant model that stores each Tenant's information.
   #
-  config.excluded_models = %w(Tenant Delayed::Job)
+  config.excluded_models = %w(
+    Tenant Delayed::Job
+    ActiveStorage::Blob
+  )
 
   # In order to migrate all of your Tenants you need to provide a list of Tenant names to Apartment.
   # You can make this dynamic by providing a Proc object to be called on migrations.
