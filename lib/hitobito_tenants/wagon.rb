@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, hitobito AG. This file is part of
 #  hitobito_tenants and licensed under the Affero General Public License version 3
@@ -17,16 +18,16 @@ module HitobitoTenants
     end
 
     config.to_prepare do
-      ApplicationController.send(:include, Tenants::ApplicationController)
-      MailingList.send(:prepend, Tenants::MailingList)
-      Person::PictureUploader.send(:prepend, Tenants::Uploader::DynamicDir)
-      Event::AttachmentUploader.send(:prepend, Tenants::Uploader::DynamicDir)
-      Group::LogoUploader.send(:prepend, Tenants::Uploader::DynamicDir)
-      BaseJob.send(:prepend, Tenants::BaseJob)
-      ApplicationMailer.send(:include, Tenants::DynamicUrlHost)
-      MailRelay::Lists.send(:prepend, Tenants::MailRelay::Lists)
+      ApplicationController.include Tenants::ApplicationController
+      MailingList.prepend Tenants::MailingList
+      Person::PictureUploader.prepend Tenants::Uploader::DynamicDir
+      Event::AttachmentUploader.prepend Tenants::Uploader::DynamicDir
+      Group::LogoUploader.prepend Tenants::Uploader::DynamicDir
+      BaseJob.prepend Tenants::BaseJob
+      ApplicationMailer.include Tenants::DynamicUrlHost
+      MailRelay::Lists.prepend Tenants::MailRelay::Lists
 
-      Ability.send(:prepend, Tenants::Ability)
+      Ability.prepend Tenants::Ability
       Ability.store.register TenantAbility
 
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
