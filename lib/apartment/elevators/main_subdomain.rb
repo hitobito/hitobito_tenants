@@ -40,9 +40,13 @@ module Apartment
       private
 
       def main_subdomain(host)
-        if host.ends_with?(Settings.tenants.domain)
-          host.gsub(/\.#{Settings.tenants.domain}$/, '')
+        if host.ends_with?(main_domain)
+          host.gsub(/\.#{main_domain}$/, '')
         end
+      end
+
+      def main_domain
+        @main_domain ||= URI.parse("http://#{Settings.tenants.domain}").host
       end
 
     end
