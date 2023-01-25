@@ -8,9 +8,7 @@
 module Tenants
   module MailRelay
     module Lists
-
       extend ActiveSupport::Concern
-
 
       def relay
         host = envelope_host_name
@@ -52,7 +50,6 @@ module Tenants
       def mail_domain
         URI("https://#{Apartment.current_host_name}").hostname
       end
-
     end
   end
 end
