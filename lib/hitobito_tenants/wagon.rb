@@ -26,6 +26,7 @@ module HitobitoTenants
       BaseJob.prepend Tenants::BaseJob
       ApplicationMailer.include Tenants::DynamicUrlHost
       MailRelay::Lists.prepend Tenants::MailRelay::Lists
+      MailingLists::BulkMail::Retriever.prepend Tenants::MailingLists::BulkMail::Retriever
 
       Ability.prepend Tenants::Ability
       Ability.store.register TenantAbility
