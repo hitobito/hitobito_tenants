@@ -10,13 +10,14 @@ module Tenants::MailingLists::BulkMail::Retriever
 
   private
 
-  def process_valid_mail(imap_mail, mail_log, validator)
+  def process_mail(mail_uid)
+    imap_mail = fetch_mail(mail_uid)
+
     host = envelope_host_name(imap_mail)
     database = Apartment::Elevators::MainSubdomain.new(nil).tenant_database(host)
     if database
       Apartment::Tenant.switch(database) { super }
     else
-      mail_log.destroy!
       logger.info("Ignored email from #{imap_mail.sender_email} for unknown tenant #{host}")
     end
   end
