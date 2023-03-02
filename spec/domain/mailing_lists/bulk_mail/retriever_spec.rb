@@ -48,9 +48,11 @@ describe MailingLists::BulkMail::Retriever do
     let(:envelope_host) { 'admin' }
 
     it 'retrieves and schedules sender job' do
-      expect(Apartment::Tenant).to receive(:switch).with(Apartment::Tenant.default_tenant).and_yield
-      expect(Messages::DispatchJob).to receive(:new).and_return(dispatch_job)
-      expect(dispatch_job).to receive(:enqueue!).and_return nil
+      expect(Apartment::Tenant).to receive(:switch).with(Apartment::Tenant.default_tenant).ordered.and_yield
+      expect(Message::BulkMail).to receive(:create!).ordered.and_call_original
+      expect(MailLog).to receive(:create!).ordered.and_call_original
+      expect(Messages::DispatchJob).to receive(:new).and_return(dispatch_job).ordered
+      expect(dispatch_job).to receive(:enqueue!).ordered.and_return nil
 
       expect { subject.perform }.to change { MailLog.count }.by(1)
     end
@@ -62,9 +64,11 @@ describe MailingLists::BulkMail::Retriever do
     let(:envelope_host) { 'test-tenant' }
 
     it 'retrieves and schedules sender job' do
-      expect(Apartment::Tenant).to receive(:switch).with('test-tenant').and_yield
-      expect(Messages::DispatchJob).to receive(:new).and_return(dispatch_job)
-      expect(dispatch_job).to receive(:enqueue!).and_return nil
+      expect(Apartment::Tenant).to receive(:switch).with('test-tenant').ordered.and_yield
+      expect(Message::BulkMail).to receive(:create!).ordered.and_call_original
+      expect(MailLog).to receive(:create!).ordered.and_call_original
+      expect(Messages::DispatchJob).to receive(:new).and_return(dispatch_job).ordered
+      expect(dispatch_job).to receive(:enqueue!).and_return(nil).ordered
 
       expect { subject.perform }.to change { MailLog.count }.by(1)
     end
