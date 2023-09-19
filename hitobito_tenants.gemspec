@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.test_files = Dir['{test,spec}/**/*']
 
   s.add_dependency 'ros-apartment', '~> 2.11.0'
+  s.add_dependency 'public_suffix', '~> 4.0.7'
 end
