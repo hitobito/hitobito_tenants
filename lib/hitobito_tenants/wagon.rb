@@ -20,9 +20,6 @@ module HitobitoTenants
     config.to_prepare do
       ApplicationController.include Tenants::ApplicationController
       MailingList.prepend Tenants::MailingList
-      Person::PictureUploader.prepend Tenants::Uploader::DynamicDir
-      Event::AttachmentUploader.prepend Tenants::Uploader::DynamicDir
-      Group::LogoUploader.prepend Tenants::Uploader::DynamicDir
       BaseJob.prepend Tenants::BaseJob
       ApplicationMailer.include Tenants::DynamicUrlHost
       MailRelay::Lists.prepend Tenants::MailRelay::Lists
