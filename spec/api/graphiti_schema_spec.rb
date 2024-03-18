@@ -8,5 +8,9 @@
 require 'spec_helper'
 
 describe 'Graphiti schema' do
+  before do
+    host! 'admin.' + ENV['RAILS_HOST_NAME']
+  end
+
   it_behaves_like 'graphiti schema file is up to date'
 end
