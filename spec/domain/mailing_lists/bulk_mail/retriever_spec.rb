@@ -47,6 +47,7 @@ describe MailingLists::BulkMail::Retriever do
     allow(imap_mail_validator).to receive(:valid_mail?).and_return(true)
     allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
     allow(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
+    allow(imap_mail_validator).to receive(:mail_too_big?).and_return(false)
   end
 
   context 'to admin tenant' do
