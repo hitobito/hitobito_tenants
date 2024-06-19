@@ -17,12 +17,18 @@ describe MailingLists::BulkMail::Retriever do
   let(:imap_mail) { build_imap_mail(42) }
   let(:dispatch_job) { instance_double(Messages::DispatchJob) }
 
-  let(:original_to) { "#{list.mail_name}@#{envelope_host}.#{Settings.tenants.domain.gsub(/:[0-9]+$/, '')}" }
+  let(:original_to) do
+    "#{list.mail_name}@#{envelope_host}.#{Settings.tenants.domain.gsub(/:[0-9]+$/, '')}"
+  end
   let(:from) { people(:top_leader).email }
 
   let(:bll)  { people(:bottom_leader) }
-  let(:bgl1) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
-  let(:bgl2) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_two)).person }
+  let(:bgl1) do
+    Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+  end
+  let(:bgl2) do
+    Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_two)).person
+  end
   let(:ind)  { Fabricate(:person) }
 
   let(:list) { mailing_lists(:leaders) }
@@ -81,7 +87,7 @@ describe MailingLists::BulkMail::Retriever do
 
     it 'does not do anything' do
       expect(Messages::DispatchJob).not_to receive(:new)
-      expect { subject.perform }.not_to change { MailLog.count }
+      expect { subject.perform }.not_to(change { MailLog.count })
     end
 
   end
@@ -110,7 +116,8 @@ describe MailingLists::BulkMail::Retriever do
     allow(mail).to receive(:hash).and_return('abcd42')
     allow(mail).to receive(:sender_email).and_return(from)
 
-    imap_mail = Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list.eml')))
+    imap_mail = Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email',
+                                                                'list.eml')))
     allow(mail).to receive(:mail).and_return(imap_mail)
     mail
   end
