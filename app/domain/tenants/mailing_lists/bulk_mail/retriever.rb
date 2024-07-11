@@ -30,6 +30,6 @@ module Tenants::MailingLists::BulkMail::Retriever
   end
 
   def receiver_host_from_sender_email(imap_mail)
-    imap_mail.original_to.to_s.split('@', 2).last.presence
+    imap_mail.original_to.to_s.split("@", 2).last.presence
   end
 end

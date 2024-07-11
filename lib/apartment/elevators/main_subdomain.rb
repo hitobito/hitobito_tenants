@@ -1,16 +1,13 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, hitobito AG. This file is part of
 #  hitobito_tenants and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
 
-require 'apartment/elevators/subdomain'
+require "apartment/elevators/subdomain"
 
 module Apartment
   module Elevators
     class MainSubdomain < Subdomain
-
       def initialize(app)
         @app = app
       end
@@ -23,7 +20,7 @@ module Apartment
         if database
           Apartment::Tenant.switch(database) { @app.call(env) }
         else
-          [301, { 'Location' => "#{request.scheme}://#{Settings.tenants.domain}" }, []]
+          [301, {"Location" => "#{request.scheme}://#{Settings.tenants.domain}"}, []]
         end
       end
 
@@ -41,14 +38,13 @@ module Apartment
 
       def main_subdomain(host)
         if host.ends_with?(main_domain)
-          host.gsub(/\.#{main_domain}$/, '')
+          host.gsub(/\.#{main_domain}$/, "")
         end
       end
 
       def main_domain
         @main_domain ||= URI.parse("http://#{Settings.tenants.domain}").host
       end
-
     end
   end
 end

@@ -1,16 +1,13 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, hitobito AG. This file is part of
 #  hitobito_tenants and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
 
-require 'apartment/adapters/abstract_adapter'
+require "apartment/adapters/abstract_adapter"
 
 module Apartment
   module Adapters
     module Wagons
-
       extend ActiveSupport::Concern
 
       def create(tenant)
@@ -31,8 +28,8 @@ module Apartment
 
       def migrate_core
         ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths,
-                                           ActiveRecord::SchemaMigration)
-                                      .migrate
+          ActiveRecord::SchemaMigration)
+          .migrate
       end
 
       def migrate_wagons
@@ -46,7 +43,6 @@ module Apartment
       def wagons
         @wagons ||= ::Wagons.all
       end
-
     end
   end
 end

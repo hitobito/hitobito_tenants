@@ -30,12 +30,12 @@ module Tenants
       # Returns only the first part after the @ sign
       def envelope_host_name
         receiver_host_from_x_original_to_header ||
-        receiver_host_from_received_header ||
+          receiver_host_from_received_header ||
           raise("Could not determine original receiver tenant for email:\n#{message.header}")
       end
 
       def receiver_host_from_x_original_to_header
-        first_header('X-Original-To').to_s.split('@').last.presence
+        first_header("X-Original-To").to_s.split("@").last.presence
       end
 
       # Heuristic method to find actual receiver of the message.
