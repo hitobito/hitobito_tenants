@@ -7,13 +7,13 @@ require "hitobito_tenants/version"
 Gem::Specification.new do |s|
   s.name = "hitobito_tenants"
   s.version = HitobitoTenants::VERSION
-  s.authors = ["Pascal Zumkehr"]
-  s.email = ["zumkehr@puzzle.ch"]
+  s.authors = ["Pascal Zumkehr", "Matthias Viehweger"]
+  s.email = ["zumkehr@puzzle.ch", "viehweger@puzzle.ch"]
   s.homepage = "http://hitobito.ch"
   s.summary = "Multiple tenants for hitobito"
   s.description = "Add database multi-tenancy to hitobito"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile"]
 
-  s.add_dependency "ros-apartment", "~> 2.10.0"
+  s.add_dependency "ros-apartment", "~> 3.1.0"
 end
