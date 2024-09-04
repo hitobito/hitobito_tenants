@@ -17,6 +17,8 @@ module HitobitoTenants
     end
 
     config.to_prepare do
+      Sortable::Prepends.prepend Tenants::Sortable
+
       ApplicationController.include Tenants::ApplicationController
       MailingList.prepend Tenants::MailingList
       BaseJob.prepend Tenants::BaseJob
