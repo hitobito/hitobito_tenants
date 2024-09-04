@@ -9,10 +9,6 @@ module Tenants
   module Sortable
     extend ActiveSupport::Concern
 
-    included do
-      ::Sortable::Prepends.remove_method(:model_table_name)
-    end
-
     def model_table_name
       model_class.table_name.delete_prefix("#{Apartment::Tenant.default_tenant}.")
     end
