@@ -22,6 +22,7 @@ module HitobitoTenants
       ApplicationController.include Tenants::ApplicationController
       MailingList.prepend Tenants::MailingList
       BaseJob.prepend Tenants::BaseJob
+      JobManager.prepend Tenants::JobManager
       ApplicationMailer.include Tenants::DynamicUrlHost
       MailRelay::Lists.prepend Tenants::MailRelay::Lists
       MailingLists::BulkMail::Retriever.prepend Tenants::MailingLists::BulkMail::Retriever
