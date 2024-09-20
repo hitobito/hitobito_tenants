@@ -37,7 +37,16 @@ Dir[HitobitoTenants::Wagon.root.join('spec/support/**/*.rb')].sort.each { |f| re
 RSpec.configure do |config|
   config.fixture_path = File.expand_path('../fixtures', __FILE__)
 
-  config.before(:suite) { Tenant.find_or_create_by(name: 'test-tenant') }
+  config.before(:suite) do
+    SeedFu.quiet = true
+    ActiveRecord::Migration.suppress_messages do
+      ['test-tenant', 'hitobito', 'cool-people-foundation'].each do |name|
+        Tenant.find_or_create_by(name: name)
+        Apartment::Tenant.create(name)
+      end
+    end
+    SeedFu.quiet = false
+  end
 
   config.before { Apartment.default_tenant = Apartment::Tenant.current }
 end
