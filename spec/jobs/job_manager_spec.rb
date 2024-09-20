@@ -8,16 +8,6 @@ describe JobManager do
 
   subject(:job_manager) { JobManager.new }
 
-  before do
-    SeedFu.quiet = true
-    ActiveRecord::Migration.suppress_messages do
-      tenant_names.each do |name|
-        Tenant.find_or_create_by(name: name)
-        Apartment::Tenant.create(name)
-      end
-    end
-    SeedFu.quiet = false
-  end
 
   before do
     expect_any_instance_of(MailRelayJob).to receive(:configured?).and_return(true) # schedule regardless of config
