@@ -18,8 +18,9 @@ module Apartment
       def migrate(tenant)
         switch(tenant) do
           migrate_core
-          seed # core
           migrate_wagons
+          Person.reset_column_information
+          seed # core
           seed_wagons
         end
       end
