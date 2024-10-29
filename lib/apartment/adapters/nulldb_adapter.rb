@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'apartment/adapters/abstract_adapter'
-require 'apartment/tenant'
+require "apartment/adapters/abstract_adapter"
+require "apartment/tenant"
 
 module Apartment
   module Tenant
