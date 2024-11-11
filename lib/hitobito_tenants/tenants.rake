@@ -32,6 +32,11 @@ namespace :tenants do
     Apartment.tenant_names.each do |tenant|
       puts "Migrating tenant #{tenant}..."
       Apartment::Tenant.migrate(tenant)
+
+      puts "Creating Search Index ..."
+      Apartment::Tenant.switch(tenant) do
+        SearchColumnBuilder.new.run
+      end
     end
   end
 end
