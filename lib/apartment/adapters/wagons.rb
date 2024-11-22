@@ -20,6 +20,7 @@ module Apartment
           migrate_core
           migrate_wagons
           Person.reset_column_information
+          CustomContent::Translation.reset_column_information
           seed # core
           seed_wagons
         end
