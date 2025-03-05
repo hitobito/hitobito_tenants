@@ -59,7 +59,8 @@ bottom_leader:
   last_name: Leader
   email: bottom_leader@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
-  address: Greatstreet 345
+  street: Greatstreet
+  housenumber: 345
   zip_code: 3456
   town: Greattown
   country: CH
@@ -70,7 +71,8 @@ bottom_member:
   last_name: Member
   email: bottom_member@example.com
   encrypted_password: $2a$04$NOZgQ.icGMwuv6Ww8DvyjuHxjuj98iKQCwtALCo5CBDGo8bgWzfty #foobar
-  address: Greatstreet 345
+  street: Greatstreet
+  housenumber: 345
   zip_code: 3456
   town: Greattown
   country: CH
