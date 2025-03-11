@@ -15,7 +15,10 @@
 #
 #
 namespace :spec do
-  Rake::Task[:spec].clear_prerequisites
+  if Rake::Task.task_defined?("spec")
+    Rake::Task[:spec].clear_prerequisites
+  end
+
   task all: "spec"
   task without_features: "spec"
 end
