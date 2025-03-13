@@ -48,7 +48,7 @@ describe JobManager do
     it 'returns false if single tenant job is missing' do
       job_manager.schedule
 
-      Delayed::Job.where("handler LIKE '%current_tenant: hitobito%'").first.delete
+      Delayed::Job.where("handler LIKE '%current_tenant: hitobito%'").last.delete
 
       allow(job_manager).to receive(:puts)
       expect(job_manager.check).to eq(false)
