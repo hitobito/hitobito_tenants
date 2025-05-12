@@ -22,6 +22,7 @@ module Apartment
           Person.reset_column_information
           CustomContent::Translation.reset_column_information
           MailLog.reset_column_information
+          CustomContent.reset_column_information
           seed # core
           seed_wagons
         end
