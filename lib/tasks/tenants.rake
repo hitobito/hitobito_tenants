@@ -3,24 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
 
-namespace :tenant do
-  desc "Creates a new tenant with the given NAME"
-  task create: :environment do
-    name = ENV["NAME"]
-
-    Tenant.create!(name: name)
-    TenantCreatorJob.new(name).perform
-  end
-
-  desc "Drops the tenant with the given NAME"
-  task drop: :environment do
-    name = ENV["NAME"]
-
-    Tenant.find_by!(name: name).destroy!
-    TenantDestroyerJob.new(name).perform
-  end
-end
-
 namespace :tenants do
   desc "Lists all defined tenants"
   task list: :environment do
