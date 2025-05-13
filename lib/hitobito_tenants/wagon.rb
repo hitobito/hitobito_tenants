@@ -12,10 +12,6 @@ module HitobitoTenants
     # Set the required application version.
     app_requirement ">= 0"
 
-    rake_tasks do
-      load "hitobito_tenants/tenants.rake"
-    end
-
     config.to_prepare do
       Sortable::Prepends.prepend Tenants::Sortable
 
