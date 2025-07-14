@@ -24,12 +24,17 @@ end
 namespace :tenants do
   desc "Lists all defined tenants"
   task list: :environment do
+    puts "Admin-Tenant: #{ENV["RAILS_ADMIN_SUBDOMAIN"]}"
     puts Apartment.tenant_names
   end
 
   desc "Migrates all defined tenants to the latest version"
   task migrate: :environment do
-    Apartment.tenant_names.each do |tenant|
+    list = Apartment.tenant_names
+    list << ENV["RAILS_ADMIN_SUBDOMAIN"]
+    tenants = list.compact_blank.uniq.sort
+
+    tenants.each do |tenant|
       puts "Migrating tenant #{tenant}..."
       Apartment::Tenant.migrate(tenant)
 
