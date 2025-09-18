@@ -20,6 +20,7 @@ module HitobitoTenants
       Sortable::Prepends.prepend Tenants::Sortable
 
       ApplicationController.include Tenants::ApplicationController
+      Group.prepend Tenants::Group
       MailingList.prepend Tenants::MailingList
       BaseJob.prepend Tenants::BaseJob
       JobManager.prepend Tenants::JobManager
