@@ -21,7 +21,9 @@ module Tenants
       end
     end
 
-    def check
+    # rubocop:todo Metrics/MethodLength
+    # rubocop:todo Metrics/AbcSize
+    def check # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
       return unless ActiveRecord::Base.connection.table_exists?("tenants")
 
       scheduled = []
@@ -50,6 +52,8 @@ module Tenants
 
       missing.empty?
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     private
 
