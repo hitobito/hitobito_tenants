@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile"]
 
-  s.add_dependency "ros-apartment", "~> 3.1.0"
+  s.add_dependency "ros-apartment", "~> 3.2.0"
 end
