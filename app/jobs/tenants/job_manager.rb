@@ -23,7 +23,8 @@ module Tenants
 
     # rubocop:todo Metrics/MethodLength
     # rubocop:todo Metrics/AbcSize
-    def check # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
+    # rubocop:todo Metrics/CyclomaticComplexity
+    def check
       return unless ActiveRecord::Base.connection.table_exists?("tenants")
 
       scheduled = []
@@ -54,6 +55,7 @@ module Tenants
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     private
 

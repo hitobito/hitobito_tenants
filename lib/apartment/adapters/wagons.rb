@@ -31,9 +31,7 @@ module Apartment
       private
 
       def migrate_core
-        ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths,
-          ActiveRecord::SchemaMigration)
-          .migrate
+        ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths).migrate
       end
 
       def migrate_wagons
