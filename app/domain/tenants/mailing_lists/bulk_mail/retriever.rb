@@ -10,9 +10,7 @@ module Tenants::MailingLists::BulkMail::Retriever
 
   private
 
-  def process_mail(mail_uid)
-    imap_mail = fetch_mail(mail_uid)
-
+  def process_mail(imap_mail, mail_uid)
     host = envelope_host_name(imap_mail)
     database = Apartment::Elevators::MainSubdomain.new(nil).tenant_database(host)
     if database
