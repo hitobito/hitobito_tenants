@@ -9,6 +9,7 @@ module Tenants
 
     def schedule
       return unless ActiveRecord::Base.connection.table_exists?("tenants")
+      return unless ActiveRecord::Base.connection.column_exists?("delayed_jobs", "tenant")
 
       mail_jobs.new.schedule
 
@@ -32,8 +33,7 @@ module Tenants
 
       Tenant.find_each do |tenant|
         tenant_jobs.each do |job_class|
-          like_query = "'%#{job_class}\ncurrent_tenant: #{tenant}%'"
-          if Delayed::Job.where("handler LIKE #{like_query}").present?
+          if Delayed::Job.where("handler LIKE '%#{job_class}%'").where(tenant: tenant.name).exists?
             scheduled << [job_class, tenant]
           else
             missing << [job_class, tenant]
