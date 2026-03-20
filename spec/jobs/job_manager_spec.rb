@@ -1,3 +1,7 @@
+#  Copyright (c) 2026, hitobito AG. This file is part of
+#  hitobito_tenants and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_tenants.
 
 require 'spec_helper'
 
@@ -21,8 +25,7 @@ describe JobManager do
 
       tenant_names.each do |tenant|
         tenant_jobs.each do |job|
-          like_query = "'%#{job}\ncurrent_tenant: #{tenant}%'"
-          expect(Delayed::Job.where("handler LIKE #{like_query}").count).to eq(1)
+          expect(Delayed::Job.where("handler LIKE '%#{job}%'").where(tenant: tenant).count).to eq(1)
         end
       end
     end
@@ -48,7 +51,7 @@ describe JobManager do
     it 'returns false if single tenant job is missing' do
       job_manager.schedule
 
-      Delayed::Job.where("handler LIKE '%current_tenant: hitobito%'").last.delete
+      Delayed::Job.where(tenant: "hitobito").last.delete
 
       allow(job_manager).to receive(:puts)
       expect(job_manager.check).to eq(false)

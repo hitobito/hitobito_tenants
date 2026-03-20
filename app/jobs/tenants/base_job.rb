@@ -7,22 +7,8 @@ module Tenants
   module BaseJob
     extend ActiveSupport::Concern
 
-    def initialize
-      super
-      @current_tenant = Apartment::Tenant.current
-    end
-
-    def before(delayed_job)
-      super
-      Apartment::Tenant.switch!(@current_tenant)
-    end
-
-    private
-
-    def parameters
-      super.tap do |hash|
-        hash[:current_tenant] = @current_tenant
-      end
+    def delayed_jobs
+      super.where(tenant: Apartment::Tenant.current)
     end
   end
 end
