@@ -6,10 +6,14 @@
 require "spec_helper"
 
 describe "DelayedJob" do
-  include ActiveJob::TestHelper
+  around do |example|
+    original_adapter = ActiveJob::Base.queue_adapter
+    ActiveJob::Base.queue_adapter = :delayed_job
+    example.run
+    ActiveJob::Base.queue_adapter = original_adapter
+  end
 
   context "for BaseJob job" do
-
     let(:job) { BaseJob.new }
 
     it "sets tenant when enqueuing and switches to tenant when performing" do

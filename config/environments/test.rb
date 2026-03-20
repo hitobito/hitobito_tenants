@@ -5,7 +5,4 @@ Rails.application.configure do
 
   # Do not eager load because of DB setup getting screwed
   config.eager_load = false
-
-  # Use delayed_job queue adapter to correctly test delayed job behaviour
-  config.active_job.queue_adapter = :delayed_job
 end
