@@ -64,3 +64,7 @@ executing
 Switching back can be done with
 
 	> Apartment::Tenant.switch!
+
+## Background Jobs
+
+Most Jobs are run specifically for one tenant. For this we added the column `delayed_jobs.tenant` which stores the subject tenant name and is referred to when switching to said tenant when running the job (see https://github.com/hitobito/hitobito_tenants/blob/master/config/initializers/tenant_delayed_job_plugin.rb.rb)
