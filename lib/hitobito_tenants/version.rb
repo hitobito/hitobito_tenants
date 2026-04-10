@@ -4,5 +4,5 @@
 #  https://github.com/hitobito/hitobito_tenants.
 
 module HitobitoTenants
-  VERSION = "2.9.0".freeze
+  VERSION = "2.9.5".freeze
 end
