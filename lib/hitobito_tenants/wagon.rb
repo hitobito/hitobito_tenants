@@ -31,6 +31,9 @@ module HitobitoTenants
       Ability.prepend Tenants::Ability
       Ability.store.register TenantAbility
 
+      Wallets::AppleWallet::PassService.id_prefix_addition = -> { Apartment::Tenant.current }
+      Wallets::GoogleWallet::PassService.id_prefix_addition = -> { Apartment::Tenant.current }
+
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
       admin[:active_for] << "tenants"
     end
