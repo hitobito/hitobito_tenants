@@ -8,9 +8,7 @@
 module Tenants::MailingLists::BulkMail::Retriever
   extend ActiveSupport::Concern
 
-  private
-
-  def process_mail(imap_mail, mail_uid)
+  def process_mail(imap_mail)
     host = envelope_host_name(imap_mail)
     database = Apartment::Elevators::MainSubdomain.new(nil).tenant_database(host)
     if database
@@ -19,6 +17,8 @@ module Tenants::MailingLists::BulkMail::Retriever
       logger.info("Ignored email from #{imap_mail.sender_email} for unknown tenant #{host}")
     end
   end
+
+  private
 
   # The receiver subdomain that originally got this email.
   # Returns only the first part after the @ sign
