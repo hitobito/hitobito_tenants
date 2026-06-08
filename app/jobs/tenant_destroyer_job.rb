@@ -16,5 +16,6 @@ class TenantDestroyerJob < BaseJob
     return if Tenant.where(name: name).exists?
 
     Apartment::Tenant.drop(name)
+    Delayed::Job.where(tenant: name).delete_all
   end
 end
