@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_tenants.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MailRelay::Lists do
-
   let(:message) do
-    mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml')))
-    mail.header['X-Original-To'] = original_to
+    mail = Mail.new(File.read(Rails.root.join("spec", "fixtures", "email", "regular.eml")))
+    mail.header["X-Original-To"] = original_to
     mail.from = from
     mail
   end
@@ -34,50 +33,43 @@ describe MailRelay::Lists do
 
   before { create_individual_subscribers }
 
-  context 'to admin tenant' do
+  context "to admin tenant" do
+    let(:envelope_host) { "admin" }
 
-    let(:envelope_host) { 'admin' }
-
-    it 'relays' do
+    it "relays" do
       expect(Apartment::Tenant).to receive(:switch).with(Apartment::Tenant.default_tenant).and_yield
 
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
-      expect(last_email.header['List-Id'].to_s).to eq('leaders.admin.hitobito.local')
-      expect(last_email.sender).to eq('leaders-bounces+top_leader=example.com@admin.hitobito.local')
+      expect(last_email.header["List-Id"].to_s).to eq("leaders.admin.hitobito.local")
+      expect(last_email.sender).to eq("leaders-bounces+top_leader=example.com@admin.hitobito.local")
     end
-
   end
 
-  context 'to custom tenant' do
+  context "to custom tenant" do
+    let(:envelope_host) { "test-tenant" }
 
-    let(:envelope_host) { 'test-tenant' }
-
-    it 'relays' do
-      expect(Apartment::Tenant).to receive(:switch).with('test-tenant').and_yield
-      expect(Apartment::Tenant).to receive(:current).and_return('test-tenant').at_least(:once)
+    it "relays" do
+      expect(Apartment::Tenant).to receive(:switch).with("test-tenant").and_yield
+      expect(Apartment::Tenant).to receive(:current).and_return("test-tenant").at_least(:once)
 
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
-      expect(last_email.header['List-Id'].to_s).to eq('leaders.test-tenant.hitobito.local')
-      expect(last_email.sender).to eq('leaders-bounces+top_leader=example.com@test-tenant.hitobito.local')
+      expect(last_email.header["List-Id"].to_s).to eq("leaders.test-tenant.hitobito.local")
+      expect(last_email.sender).to eq("leaders-bounces+top_leader=example.com@test-tenant.hitobito.local")
     end
-
   end
 
-  context 'to non-existing tenant' do
+  context "to non-existing tenant" do
+    let(:envelope_host) { "test-tenant" }
 
-    let(:envelope_host) { 'test-tenant' }
-
-    it 'does not do anything' do
+    it "does not do anything" do
       expect_any_instance_of(Apartment::Elevators::MainSubdomain).to receive(:tenant_database).and_return(nil)
       expect { subject.relay }.not_to change { ActionMailer::Base.deliveries.size }
     end
-
   end
-
 
   def create_individual_subscribers
     # single subscription
