@@ -30,7 +30,7 @@ describe Wallets::AppleWallet::PassService do
 
   it "includes tenant in id prefix" do
     Apartment::Tenant.switch("cool-people-foundation") do
-      expect(service.pass_data[:serialNumber]).to eq("hitobito.cool-people-foundation.#{installation.id}")
+      expect(service.pass_data[:serialNumber]).to eq("hitobito.production.cool-people-foundation.#{installation.id}")
     end
   end
 end
