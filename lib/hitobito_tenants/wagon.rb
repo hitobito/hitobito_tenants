@@ -27,6 +27,7 @@ module HitobitoTenants
       ApplicationMailer.include Tenants::DynamicUrlHost
       MailRelay::Lists.prepend Tenants::MailRelay::Lists
       MailingLists::BulkMail::Retriever.prepend Tenants::MailingLists::BulkMail::Retriever
+      Imap::Connector.prepend Tenants::Imap::Connector
 
       Ability.prepend Tenants::Ability
       Ability.store.register TenantAbility

@@ -9,6 +9,7 @@ module Tenants
   module MailRelay
     module Lists
       extend ActiveSupport::Concern
+      include Tenants::MailEnvelopeHost
 
       def relay
         host = envelope_host_name
@@ -26,25 +27,9 @@ module Tenants
         self.class.personal_return_path(envelope_receiver_name, sender_email, mail_domain)
       end
 
-      # The receiver subdomain that originally got this email.
-      # Returns only the first part after the @ sign
       def envelope_host_name
-        receiver_host_from_x_original_to_header ||
-          receiver_host_from_received_header ||
+        host_from_x_original_to(message) || host_from_received(message) ||
           raise("Could not determine original receiver tenant for email:\n#{message.header}")
-      end
-
-      def receiver_host_from_x_original_to_header
-        first_header("X-Original-To").to_s.split("@").last.presence
-      end
-
-      # Heuristic method to find actual receiver of the message.
-      # May return nil if could not determine.
-      def receiver_host_from_received_header
-        if (received = message.received)
-          received = received.first if received.respond_to?(:first)
-          received.info[/ for .*?[^\s<>]+@([^\s<>]+)/, 1]
-        end
       end
 
       def mail_domain
