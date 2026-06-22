@@ -39,7 +39,7 @@ describe Wallets::GoogleWallet::PassService do
     end
 
 
-    let(:prefix) { "#{issuer_id}.hitobito.production.cool-people-foundation" }
+    let(:prefix) { "#{issuer_id}.hitobito.test.cool-people-foundation" }
 
     it "includes tenant in id prefix" do
       Apartment::Tenant.switch("cool-people-foundation") do
