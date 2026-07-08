@@ -45,11 +45,12 @@ describe Imap::Connector do
     expect(net_imap).to receive(:disconnect)
 
     expect(net_imap).to receive(:select).with("INBOX")
-    expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([41, 42])
   end
 
   describe "#fetch_mails" do
     it "returns only mails for the current tenant" do
+      expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([41, 42])
+
       expect(net_imap).to receive(:uid_fetch)
         .with([41, 42], header_fetch_attribute)
         .and_return([
@@ -65,6 +66,16 @@ describe Imap::Connector do
 
       expect(result[:total_count]).to eq(1)
       expect(result[:mails].map(&:uid)).not_to include "41"
+    end
+
+    it "handles empty mailboxes as well" do
+      expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([])
+      expect(net_imap).to_not receive(:uid_fetch)
+
+      result = imap_connector.fetch_mails(:inbox)
+
+      expect(result[:total_count]).to be_zero
+      expect(result[:mails]).to be_empty
     end
   end
 
