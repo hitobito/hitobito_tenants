@@ -15,8 +15,10 @@ module Tenants
 
       def fetch_all_uids
         all_uids = super
+        return [] if all_uids.empty?
+
         uid_headers = @imap.uid_fetch(all_uids, "BODY.PEEK[HEADER.FIELDS (X-ORIGINAL-TO RECEIVED)]")
-        return [] if all_uids.empty? || uid_headers.blank?
+        return [] if uid_headers.blank?
 
         uid_headers.select do |header|
           mail = Mail.read_from_string(header.attr["BODY[HEADER.FIELDS (X-ORIGINAL-TO RECEIVED)]"])
