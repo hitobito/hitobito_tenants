@@ -13,6 +13,11 @@ module Tenants
 
       private
 
+      def count(mailbox)
+        select_mailbox(mailbox)
+        fetch_all_uids.count
+      end
+
       def fetch_all_uids
         all_uids = super
         return [] if all_uids.empty?
