@@ -43,11 +43,13 @@ describe Imap::Connector do
     expect(net_imap).to receive(:login)
     expect(net_imap).to receive(:close)
     expect(net_imap).to receive(:disconnect)
-
-    expect(net_imap).to receive(:select).with("INBOX")
   end
 
   describe "#fetch_mails" do
+    before do
+      expect(net_imap).to receive(:select).with("INBOX")
+    end
+
     it "returns only mails for the current tenant" do
       expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([41, 42])
 
@@ -76,6 +78,47 @@ describe Imap::Connector do
 
       expect(result[:total_count]).to be_zero
       expect(result[:mails]).to be_empty
+    end
+  end
+
+  describe "#counts" do
+    before do
+      expect(net_imap).to receive(:select).with("INBOX")
+      expect(net_imap).to receive(:select).with("Junk")
+      expect(net_imap).to receive(:select).with("Failed")
+    end
+
+    subject(:counts) { imap_connector.counts.symbolize_keys }
+
+    it "uid searches three mailboxes without fetching if empty" do
+      expect(net_imap).to receive(:uid_search).with(["ALL"]).thrice.and_return([])
+      expect(net_imap).to_not receive(:uid_fetch)
+
+      expect(counts).to eq(inbox: 0, spam: 0, failed: 0)
+    end
+
+    it "uid searches three mailboxes, fetches and filters" do
+      expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([41, 42], [43], [44])
+
+      expect(net_imap).to receive(:uid_fetch)
+        .with([41, 42], header_fetch_attribute)
+        .and_return([
+          header_fetch_data(41, x_original_to: "list@#{other_tenant}"),
+          header_fetch_data(42, x_original_to: "list@#{current_tenant}")
+        ])
+      expect(net_imap).to receive(:uid_fetch)
+          .with([43], header_fetch_attribute)
+          .and_return([
+            header_fetch_data(43, x_original_to: "list@#{other_tenant}")
+          ])
+      expect(net_imap).to receive(:uid_fetch)
+          .with([44], header_fetch_attribute)
+          .and_return([
+            header_fetch_data(44, x_original_to: "list@#{current_tenant}")
+          ])
+
+
+      expect(counts).to eq(inbox: 1, spam: 0, failed: 1)
     end
   end
 
