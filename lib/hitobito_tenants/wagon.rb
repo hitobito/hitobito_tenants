@@ -35,8 +35,8 @@ module HitobitoTenants
       Wallets::AppleWallet::PassService.id_prefix_addition = -> { Apartment::Tenant.current }
       Wallets::GoogleWallet::PassService.id_prefix_addition = -> { Apartment::Tenant.current }
 
-      admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
-      admin[:active_for] << "tenants"
+      NavigationHelper::ADMIN_GROUPS[:people][:items] <<
+        {model: Tenant, path: :tenants_path}
     end
 
     initializer "tenants.configure_apartment" do |_app|
