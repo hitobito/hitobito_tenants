@@ -36,7 +36,7 @@ module HitobitoTenants
       Wallets::GoogleWallet::PassService.id_prefix_addition = -> { Apartment::Tenant.current }
 
       NavigationHelper::ADMIN_GROUPS[:people][:items] <<
-        {model: Tenant, path: :tenants_path}
+        NavigationHelper::Item.new(model: Tenant, path: :tenants_path)
     end
 
     initializer "tenants.configure_apartment" do |_app|
