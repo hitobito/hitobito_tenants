@@ -49,6 +49,29 @@ describe "DelayedJob" do
     end
   end
 
+  it "sets Settings.application.hostname to the tenant hostname and resets it" do
+    stub_const("TestHostnameJob", Class.new(BaseJob) do
+      cattr_accessor :captured_hostname
+
+      def perform
+        self.class.captured_hostname = Settings.application.hostname
+      end
+    end)
+
+    original = Settings.application.hostname
+
+    Apartment::Tenant.switch("cool-people-foundation") do
+      TestHostnameJob.new.enqueue!
+    end
+
+    job_instance = Delayed::Job.last
+
+    run_job(job_instance)
+
+    expect(TestHostnameJob.captured_hostname).to eq("cool-people-foundation.hitobito.local")
+    expect(Settings.application.hostname).to eq(original)
+  end
+
   def run_job(job_instance)
     worker = Delayed::Worker.new
 
