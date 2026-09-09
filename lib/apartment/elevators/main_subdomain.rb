@@ -18,7 +18,11 @@ module Apartment
         database = tenant_database(request.host)
 
         if database
-          Apartment::Tenant.switch(database) { @app.call(env) }
+          Apartment::Tenant.switch(database) do
+            Tenants::ApplicationHost.with_tenant_hostname do
+              @app.call(env)
+            end
+          end
         else
           [301, {"Location" => "#{request.scheme}://#{Settings.tenants.domain}"}, []]
         end

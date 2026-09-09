@@ -13,7 +13,9 @@ class TenantDelayedJobPlugin < Delayed::Plugin
     lifecycle.around :perform do |worker, job, *args, &block|
       # Switch to the saved tenant, occurs before deserializing this job
       Apartment::Tenant.switch(job.tenant) do
-        block.call(worker, job, *args)
+        Tenants::ApplicationHost.with_tenant_hostname do
+          block.call(worker, job, *args)
+        end
       end
     end
   end
